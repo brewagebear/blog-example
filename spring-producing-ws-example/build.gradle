@@ -12,9 +12,50 @@ repositories {
     mavenCentral()
 }
 
+configurations {
+    jaxb
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src/main/java'
+            srcDir 'build/generated-sources/jaxb' // xsd 파일을 통해서 역직렬화되어 생성되는 자바 클래스파일의 위치
+        }
+    }
+}
+// xsd 파일을 토대로 자바 클래스 파일을 생성한다
+task genJaxb {
+    ext.sourcesDir = "${buildDir}/generated-sources/jaxb"
+    ext.schema = "src/main/resources/countries.xsd"
+
+    outputs.dir sourcesDir
+
+    doLast() {
+        // 커스텀 Ant 태스크를 만든다.
+        project.ant {
+            taskdef name: "xjc", classname: "com.sun.tools.xjc.XJCTask",
+                    classpath: configurations.jaxb.asPath
+            mkdir(dir: sourcesDir)
+            // 위에서 입력한 스키마 폴더와 소스디렉토리에 .xsd 파일을 토대로 XML을 자바 객체로 역직렬화(Unmarshalling) 한다.
+            xjc(destdir: sourcesDir, schema: schema) {
+                arg(value: "-wsdl")
+                produces(dir: sourcesDir, includes: "**/*.java")
+            }
+        }
+    }
+}
+
+compileJava.dependsOn genJaxb
+
+compileJava.dependsOn genJaxb
+
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-web-services'
+    implementation 'wsdl4j:wsdl4j'
+    jaxb("org.glassfish.jaxb:jaxb-xjc")
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
