@@ -1,4 +1,4 @@
-package simple_chatting_server;
+package simple_chatting_example.nio;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
