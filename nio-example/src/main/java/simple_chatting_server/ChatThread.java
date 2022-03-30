@@ -30,6 +30,8 @@ public class ChatThread extends Thread {
                 String message = bufferedReader.readLine();
 
                 if (message.equals("quit") || message.equals("shutdown")) {
+                    sc.socket().close();
+                    sc.close();
                     System.exit(0);
                 }
 

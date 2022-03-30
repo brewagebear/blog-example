@@ -52,26 +52,19 @@ public class Server {
     public void start() {
         log.info("Server is started....");
         try {
-            while (true) {
+            while (this.serverSocketChannel.isOpen()) {
                 log.info("요청을 기다리는 중..");
                 // 셀렉터의 select() 메서드로 준비된 이벤트가 존재하는지 확인
+                selector.select();
+                // 준비된 이벤트들을 하나씩 처리한다.
+                Iterator<SelectionKey> iterator = selector.selectedKeys().iterator();
 
-                try {
-                    selector.select();
-                    // 준비된 이벤트들을 하나씩 처리한다.
-                    Iterator<SelectionKey> iterator = selector.selectedKeys().iterator();
+                while (iterator.hasNext()) {
+                    SelectionKey key = iterator.next();
+                    iterator.remove();
 
-                    while (iterator.hasNext()) {
-                        SelectionKey key = iterator.next();
-                        if (key.isAcceptable()) {
-                            accept(key);
-                        } else if (key.isReadable()) {
-                            read(key);
-                        }
-                        iterator.remove();
-                    }
-                } catch (IOException ex) {
-                    log.warn("Server start()", ex);
+                    if(key.isAcceptable()) accept(key);
+                    if(key.isReadable()) read(key);
                 }
             }
         } catch (Exception e) {
@@ -87,7 +80,7 @@ public class Server {
             sc = server.accept();
 
             registerChannel(selector, sc, SelectionKey.OP_READ);
-            log.info(sc.toString() + " 클라이언트가 접속했습니다.");
+            System.out.println(sc.toString() + " 클라이언트가 접속했습니다.");
 
         } catch (IOException e) {
             log.warn("Server.accept()", e);
@@ -108,20 +101,25 @@ public class Server {
     private void read(SelectionKey key) {
         // SelectionKey로부터 소켓채널을 얻어온다.
         SocketChannel sc = (SocketChannel) key.channel();
+
         // ByteBuffer를 생성한다.
         ByteBuffer buffer = ByteBuffer.allocateDirect(1024);
+
         try {
             int read = sc.read(buffer);
-            log.info(read + " byte를 읽었습니다.");
+            if(read == -1) {
+                sc.socket().close();
+                sc.close();
+                removeUser(sc);
+                System.out.println(sc.toString() + " 클라이언트가 접속을 해제하였습니다.");
+            }
         } catch (IOException e) {
             try {
                 sc.close();
             } catch (IOException ex) {
             }
-
             removeUser(sc);
-
-            log.info(sc.toString() + " 클라이언트가 접속을 해제하였습니다.");
+            System.out.println(sc.toString() + " 클라이언트가 접속을 해제하였습니다.");
         }
 
         try {
@@ -136,9 +134,7 @@ public class Server {
     private void broadcast(ByteBuffer buffer) throws IOException {
         buffer.flip();
 
-        Iterator iterator = room.iterator();
-        while (iterator.hasNext()) {
-            SocketChannel sc = (SocketChannel) iterator.next();
+        for (SocketChannel sc : room) {
             if (sc != null) {
                 sc.write(buffer);
                 buffer.rewind();

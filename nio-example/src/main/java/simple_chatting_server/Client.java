@@ -49,20 +49,20 @@ public class Client {
     }
 
     private void startWriter() {
-        log.info("Writer is started..");
+        System.out.println("Writer is started..");
         Thread thread = new ChatThread(sc);
         thread.start();
     }
 
     private void startReader() {
-        log.info("Reader is started..");
+        System.out.println("Reader is started..");
         try {
             while (true) {
-                log.info("요청을 기다리는 중..");
                 // 셀렉터의 select() 메서드로 준비된 이벤트가 있는지 확인한다.
                 selector.select();
 
                 Iterator<SelectionKey> iterator = selector.selectedKeys().iterator();
+
                 while (iterator.hasNext()) {
                     SelectionKey key = iterator.next();
                     if (key.isReadable()) {
@@ -93,8 +93,10 @@ public class Client {
         buffer.flip();
 
         String data = "";
+
         try {
             data = decoder.decode(buffer).toString();
+            System.out.println("Message : " + data);
         } catch (CharacterCodingException e) {
             log.warn("read()", e);
         }
