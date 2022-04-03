@@ -7,7 +7,7 @@ import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileChannel.MapMode;
 
-public class MMIO extends MyTimer {
+public class MemoryMappingIO extends MyTimer {
 
     private static final String DEST_PATH = "/Users/liquid.bear/Downloads/io_test_out.txt";
 
