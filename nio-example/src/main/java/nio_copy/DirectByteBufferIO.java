@@ -6,14 +6,12 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 
-public class NormalByteBufferIO extends MyTimer {
-
+public class DirectByteBufferIO extends MyTimer {
     private static final String DEST_PATH = "/Users/liquid.bear/Downloads/io_test_out.txt";
-
     public static void main(String[] args) throws IOException {
         start();
         copy();
-        end("Normal Blocking I/O");
+        end("DirectByteBuffer I/O");
     }
 
     public static void copy() throws IOException {
@@ -22,7 +20,7 @@ public class NormalByteBufferIO extends MyTimer {
             FileChannel fileInputChannel = fileInputStream.getChannel();
             FileChannel fileOutputChannel = fileOutputStream.getChannel()) {
 
-            ByteBuffer byteBuffer = ByteBuffer.allocate((int) fileInputChannel.size());
+            ByteBuffer byteBuffer = ByteBuffer.allocateDirect((int) fileInputChannel.size());
             fileInputChannel.read(byteBuffer);
             byteBuffer.flip();
             fileOutputChannel.write(byteBuffer);

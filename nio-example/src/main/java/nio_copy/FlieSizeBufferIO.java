@@ -11,7 +11,7 @@ public class FlieSizeBufferIO extends MyTimer {
     public static void main(String[] args) throws IOException {
         start();
         copy();
-        end("Blocking I/O");
+        end("Buffer has same size File I/O");
     }
 
     public static void copy() throws IOException {
