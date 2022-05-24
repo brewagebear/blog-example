@@ -1,0 +1,5 @@
+rootProject.name = 'hexagonal-async-example'
+include 'domain'
+include 'infrastructure:persistence'
+include 'application:member-service'
+include 'application:config'
