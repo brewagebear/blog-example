@@ -1,7 +1,6 @@
 package io.github.brewagebear.mapper;
 
 import io.github.brewagebear.domain.Order;
-import io.github.brewagebear.dto.OrderRequest;
 import io.github.brewagebear.dto.OrderResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;

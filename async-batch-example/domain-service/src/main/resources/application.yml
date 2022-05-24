@@ -1,9 +1,6 @@
 spring:
-  jpa:
-    hibernate:
-      ddl-auto: create
   kafka:
     producer:
       bootstrap-servers: localhost:9094
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      value-serializer: org.apache.kafka.common.serialization.JsonSerializer
