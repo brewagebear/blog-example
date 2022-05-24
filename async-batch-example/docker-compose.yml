@@ -1,0 +1,54 @@
+version: '2'
+
+services:
+  zookeeper:
+    image: zookeeper:3.6.3
+    ports:
+      - "2181:2181"
+    restart: always
+    volumes:
+      - ./zookeeper-init.sh:/scripts/zookeeper-init.sh
+      - ./zookeeper-kafka-manager-init.sh:/scripts/zookeeper-kafka-manager-init.sh
+    command:
+      - sh
+      - -c
+      - |
+        chmod +x /scripts/zookeeper-init.sh && /scripts/zookeeper-init.sh &&
+        chmod +x /scripts/zookeeper-kafka-manager-init.sh && /scripts/zookeeper-kafka-manager-init.sh
+    networks:
+      - kafka-cluster
+
+  kafka:
+    image: wurstmeister/kafka:2.13-2.8.1
+    ports:
+      - "9092"
+    environment:
+      DOCKER_API_VERSION: 1.22
+      KAFKA_BROKER_ID: 1
+      KAFKA_ADVERTISED_HOST_NAME: kafka
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_CREATE_TOPICS: "test:1:1"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: unless-stopped
+    networks:
+      - kafka-cluster
+
+  kafka-manager:
+    container_name: kafka-manager
+    image: brewagebear/kafka-manager:1.0.0
+    restart: on-failure
+    depends_on:
+      - kafka
+      - zookeeper
+    environment:
+      ZK_HOSTS: zookeeper:2181
+      APPLICATION_SECRET: "random-secret"
+      KM_ARGS: -Djava.net.preferIPv4Stack=true
+    ports:
+      - "9000:9000"
+    networks:
+      - kafka-cluster
+
+networks:
+  kafka-cluster:
