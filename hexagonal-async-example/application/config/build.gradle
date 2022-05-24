@@ -1,0 +1,18 @@
+plugins {
+    id 'org.springframework.boot'
+}
+
+group 'io.github.brewagebear'
+version '1.0-SNAPSHOT'
+
+dependencies {
+    implementation project(":domain")
+    implementation project(":infrastructure:persistence")
+
+    implementation 'org.springframework:spring-context'
+    implementation 'org.springframework:spring-context-support'
+}
+
+jar {
+    enabled = true
+}
