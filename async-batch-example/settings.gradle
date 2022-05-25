@@ -1,0 +1,4 @@
+rootProject.name = 'async-batch-example'
+include 'batch-service'
+include 'domain-service'
+
