@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import lombok.Builder;
 
 @Entity
 public class Stock {
@@ -18,8 +19,10 @@ public class Stock {
     @Column(name = "stock_id")
     private Long id;
 
+    @Column(name = "product_id")
     private String productId;
 
+    @Column(name = "avaliable_quantity")
     private Long availableStockQty;
 
     @OneToMany(mappedBy = "stock", cascade = CascadeType.ALL)
@@ -28,6 +31,7 @@ public class Stock {
     protected Stock() {
     }
 
+    @Builder
     public Stock(String productId, Long availableStockQty) {
         this.productId = productId;
         this.availableStockQty = availableStockQty;
