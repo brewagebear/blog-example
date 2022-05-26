@@ -6,13 +6,8 @@ group 'io.github.brewagebear'
 version '1.0-SNAPSHOT'
 
 dependencies {
-    implementation project(":order-service")
-
-    implementation 'org.springframework.boot:spring-boot-starter-batch'
-    implementation 'org.springframework.kafka:spring-kafka'
-
-    implementation 'org.mapstruct:mapstruct:1.4.2.Final'
-    implementation 'org.mapstruct:mapstruct-processor:1.4.2.Final'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.retry:spring-retry'
 
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
