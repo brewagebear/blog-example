@@ -1,0 +1,4 @@
+rootProject.name = 'tcc-pattern-example'
+include 'order-service'
+include 'stock-service'
+
