@@ -1,0 +1,2 @@
+PUT http://localhost:8888/api/v1/stocks/3
+Content-Type: application/json
