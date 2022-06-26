@@ -7,7 +7,6 @@ import org.springframework.scheduling.annotation.AsyncConfigurer;
 import org.springframework.scheduling.annotation.EnableAsync;
 
 @SpringBootApplication
-@EnableAsync
 public class TemperatureApplication implements AsyncConfigurer {
 
     public static void main(String[] args) {
