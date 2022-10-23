@@ -8,7 +8,7 @@ on:
 env:
   AWS_REGION: ap-northeast-2
   AWS_LIGHTSAIL_SERVICE_NAME: amazon-lightsail-container-example
-  RESOURCE_PATH: ./lightsail-ci-cd-example/src/main/resources/application.yml
+  RESOURCE_PATH: ./lightsail-example/src/main/resources/application.yml
 
 jobs:
   deploy:
@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: workspace
+        working-directory: lightsail-example
     steps:
       - name: Checkout
         uses: actions/checkout@v2
