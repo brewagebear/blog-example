@@ -8,7 +8,6 @@ on:
 env:
   AWS_REGION: ap-northeast-2
   AWS_LIGHTSAIL_SERVICE_NAME: amazon-lightsail-container-example
-  RESOURCE_PATH: ./lightsail-example/src/main/resources/application.yml
 
 jobs:
   deploy:
@@ -16,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: lightsail-example
+        working-directory: ligthsail-example
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -42,11 +41,6 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-
-      - name: Set application.yml
-        uses: microsoft/variable-substitution@v1
-        with:
-          files: ${{ env.RESOURCE_PATH }} 
 
       - name: Build Docker Image
         run: DOCKER_BUILDKIT=1 docker build -t ${{ env.AWS_LIGHTSAIL_SERVICE_NAME }}:release .
