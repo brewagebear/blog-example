@@ -11,6 +11,7 @@ plugins {
     id(Plugins.spring_dependency_management) version Plugins.Versions.spring_dependency_management apply false
     id(Plugins.gradle_schema_registry) version Plugins.Versions.gradle_schema_registry apply false
     id(Plugins.gradle_avro) version  Plugins.Versions.gradle_avro apply false
+    id(Plugins.gradle_kafka_connect) version Plugins.Versions.gradle_kafka_connect apply false
 
     kotlin(Plugins.jvm) version Plugins.Versions.kotlin
 }
@@ -71,5 +72,11 @@ project(":producer") {
     apply {
         plugin(Plugins.gradle_avro)
         plugin(Plugins.gradle_schema_registry)
+    }
+}
+
+project(":connector") {
+    apply {
+        plugin(Plugins.gradle_kafka_connect)
     }
 }

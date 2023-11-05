@@ -3,5 +3,6 @@ rootProject.name = "kafka-example"
 include(
         "avro",
         "producer",
-        "consumer"
+        "consumer",
+        "connector"
 )

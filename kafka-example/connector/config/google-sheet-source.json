@@ -1,0 +1,12 @@
+{
+  "name": "google-sheet-json",
+  "config": {
+    "connector.class": "io.github.brewagebear.SimpleGoogleSheetConnector",
+    "topic": "sheet-data",
+    "key.converter": "org.apache.kafka.connect.storage.StringConverter",
+    "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "value.converter.schemas.enable": "true",
+    "tasks.max": "1",
+    "poll.interval.ms": "50000"
+  }
+}

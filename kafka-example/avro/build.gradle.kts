@@ -1,5 +1,8 @@
 description = "AVRO Schema Module"
 
+val avro_soruce_base_path = "src/main/java/io/github/brewagebear/schemas/avro"
+val avro_source_download_path = "${avro_soruce_base_path}/download"
+
 dependencies {
     implementation(Dependencies.avro)
 }
@@ -15,7 +18,7 @@ tasks.bootJar {
 sourceSets {
     main {
         resources {
-            srcDir("src/main/java/io/github/brewagebear/schemas")
+            srcDir(avro_soruce_base_path)
         }
     }
 }
@@ -31,12 +34,17 @@ schemaRegistry {
     quiet.set(false)
 
     register.subject(
-            "student",
-            "avro/src/main/java/io/github/brewagebear/schemas/avro/student.avsc",
-            "AVRO"
-    )
+            "university.avro.Student",
+            "avro/${avro_soruce_base_path}/student.avsc",
+            "AVRO")
+
+    register.subject(
+            "university.avro.Professor",
+            "avro/${avro_soruce_base_path}/professor.avsc",
+            "AVRO")
 
     config {
-        subject("student", "FULL")
+        subject("student", "BACKWARD")
+        subject("professor", "FORWARD")
     }
 }

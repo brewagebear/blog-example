@@ -12,6 +12,7 @@ object Plugins {
     const val spring_dependency_management = "io.spring.dependency-management"
     const val gradle_schema_registry = "com.github.imflog.kafka-schema-registry-gradle-plugin"
     const val gradle_avro = "com.github.davidmc24.gradle.plugin.avro"
+    const val gradle_kafka_connect = "com.github.sandonjacobs.gradle-kafka-connect"
 
     const val jvm = "jvm"
     const val java_library = "java-library"
@@ -22,6 +23,7 @@ object Plugins {
         const val kotlin = "1.8.10"
         const val gradle_schema_registry = "1.11.1"
         const val gradle_avro = "1.9.1"
+        const val gradle_kafka_connect = "0.9.1"
     }
 }
 
@@ -32,13 +34,22 @@ object Dependencies {
 
     const val avro = "org.apache.avro:avro:${Versions.avro_version}"
     const val kafka_avro_serializer = "io.confluent:kafka-avro-serializer:${Versions.kafka_avro_serializer}"
+    const val kafka_connect_api = "org.apache.kafka:connect-api:${Versions.kafka_connect_api}"
+    const val google_sheet_api = "com.google.apis:google-api-services-sheets:${Versions.google_sheet_api}"
+    const val google_api_client = "com.google.api-client:google-api-client:${Versions.google_api_client}"
+    const val google_oauth_client = "com.google.auth:google-auth-library-oauth2-http:${Versions.google_oauth_client}"
 
     const val junit_bom = "org.junit:junit-bom:${Versions.junit_bom}"
     const val junit_jupiter = "org.junit.jupiter:junit-jupiter"
 
     object Versions {
+
+        const val kafka_connect_api = "3.6.0"
         const val junit_bom = "5.9.1"
         const val avro_version = "1.11.3"
         const val kafka_avro_serializer = "7.5.1"
+        const val google_api_client = "2.2.0"
+        const val google_sheet_api = "v4-rev20230815-2.0.0"
+        const val google_oauth_client = "1.19.0"
     }
 }
