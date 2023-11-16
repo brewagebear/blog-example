@@ -7,6 +7,12 @@
     "value.converter": "org.apache.kafka.connect.json.JsonConverter",
     "value.converter.schemas.enable": "true",
     "tasks.max": "1",
-    "poll.interval.ms": "50000"
+    "poll.interval.ms": "50000",
+    "project_id": "project_id",
+    "private_key_id" : "private_key_id",
+    "private_key" : "-----BEGIN PRIVATE KEY-----\n-----END PRIVATE KEY-----\n",
+    "client_email" : "test.iam.gserviceaccount.com",
+    "client_id": "client_id",
+    "sheet_id" : "1U_Q4qWeIzrXezL8CERnfxwNNxfNZlyyVwG0mujTKJZY"
   }
 }
