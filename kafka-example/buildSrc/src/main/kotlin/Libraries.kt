@@ -13,6 +13,7 @@ object Plugins {
     const val gradle_schema_registry = "com.github.imflog.kafka-schema-registry-gradle-plugin"
     const val gradle_avro = "com.github.davidmc24.gradle.plugin.avro"
     const val gradle_kafka_connect = "com.github.sandonjacobs.gradle-kafka-connect"
+    const val gradle_shadow = "com.github.johnrengelman.shadow"
 
     const val jvm = "jvm"
     const val java_library = "java-library"
@@ -24,6 +25,7 @@ object Plugins {
         const val gradle_schema_registry = "1.11.1"
         const val gradle_avro = "1.9.1"
         const val gradle_kafka_connect = "0.9.1"
+        const val gradle_shadow = "6.1.0"
     }
 }
 
@@ -38,12 +40,14 @@ object Dependencies {
     const val google_sheet_api = "com.google.apis:google-api-services-sheets:${Versions.google_sheet_api}"
     const val google_api_client = "com.google.api-client:google-api-client:${Versions.google_api_client}"
     const val google_oauth_client = "com.google.auth:google-auth-library-oauth2-http:${Versions.google_oauth_client}"
+    const val slf4j = "org.slf4j:slf4j-api:${Versions.slf4j}"
+    const val lombok = "org.projectlombok:lombok:${Versions.lombok}"
+    const val jackson = "com.fasterxml.jackson.core:jackson-databind:${Versions.jackson}"
 
     const val junit_bom = "org.junit:junit-bom:${Versions.junit_bom}"
     const val junit_jupiter = "org.junit.jupiter:junit-jupiter"
 
     object Versions {
-
         const val kafka_connect_api = "3.6.0"
         const val junit_bom = "5.9.1"
         const val avro_version = "1.11.3"
@@ -51,5 +55,8 @@ object Dependencies {
         const val google_api_client = "2.2.0"
         const val google_sheet_api = "v4-rev20230815-2.0.0"
         const val google_oauth_client = "1.19.0"
+        const val slf4j = "1.7.30"
+        const val lombok = "1.18.30"
+        const val jackson = "2.15.3"
     }
 }

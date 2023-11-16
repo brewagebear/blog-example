@@ -9,7 +9,10 @@ import org.apache.kafka.connect.source.SourceRecord;
 import org.apache.kafka.connect.source.SourceTask;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static io.github.brewagebear.SimpleGoogleSheetSourceConfig.TASK_ID;
@@ -17,9 +20,7 @@ import static io.github.brewagebear.SimpleGoogleSheetSourceConfig.TASK_ID;
 @Slf4j
 public class SimpleGoogleSheetTask extends SourceTask {
     private final static String POSITION_NAME = "position";
-    private final static int FETCH_SIZE = 5;
     private final static long DEFAULT_WAIT_MS = 500;
-    private final static String SPREADSHEET_ID = "1U_Q4qWeIzrXezL8CERnfxwNNxfNZlyyVwG0mujTKJZY";
     private final AtomicBoolean running = new AtomicBoolean(false);
     private final Time time;
     private long lastProcessedOffset;
@@ -29,6 +30,8 @@ public class SimpleGoogleSheetTask extends SourceTask {
     private Sheets sheets;
     private int lastRow = 2;
     private String range;
+    private GoogleSheetService googleSheetService;
+    private int fetchSize;
 
     public SimpleGoogleSheetTask() {
         this.time = new SystemTime();
@@ -39,9 +42,11 @@ public class SimpleGoogleSheetTask extends SourceTask {
     public void start(Map<String, String> props) {
         log.info("Starting Google Sheet task with config: {}", props);
         config = new SimpleGoogleSheetSourceConfig(props);
-        GoogleSheetService googleSheetService = new GoogleSheetService();
+        googleSheetService = new GoogleSheetService(config.getGoogleCredential());
+
         taskId = props.get("task.id");
         range = getNextRange(2);
+        fetchSize = config.getFetchSize();
 
         sheets = googleSheetService.connect();
         running.set(true);
@@ -83,7 +88,7 @@ public class SimpleGoogleSheetTask extends SourceTask {
         List<SourceRecord> records = new ArrayList<>();
 
         try {
-            List<List<String>> data = new GoogleSheetService().getResponse(SPREADSHEET_ID, sheets, range);
+            List<List<String>> data = googleSheetService.getResponse(sheets, range);
 
             if (data != null && !data.isEmpty()) {
                 for (List<String> row : data) {
@@ -115,12 +120,12 @@ public class SimpleGoogleSheetTask extends SourceTask {
 
     private String getNextRange(int lastRange) {
         updateLastRow();
-        int endRow = lastRange + SimpleGoogleSheetTask.FETCH_SIZE - 1;
+        int endRow = lastRange + fetchSize - 1;
         return "A" + (lastRange) + ":B" + (endRow);
     }
 
     private void updateLastRow() {
-        this.lastRow += FETCH_SIZE;
+        this.lastRow += fetchSize;
     }
 
     @Override

@@ -1,9 +1,7 @@
-import com.github.davidmc24.gradle.plugin.avro.GenerateAvroJavaTask
-
 description = "Kafka Connector Module"
 
 plugins {
-    id("com.github.johnrengelman.shadow") version "6.1.0"
+    id(Plugins.gradle_shadow) version Plugins.Versions.gradle_shadow
 }
 
 dependencies {
@@ -11,11 +9,12 @@ dependencies {
     implementation(Dependencies.google_api_client)
     implementation(Dependencies.google_sheet_api)
     implementation(Dependencies.google_oauth_client)
+    implementation(Dependencies.jackson)
 
-    implementation("org.slf4j:slf4j-api:1.7.30")
+    implementation(Dependencies.slf4j)
 
-    compileOnly("org.projectlombok:lombok:1.18.30")
-    annotationProcessor("org.projectlombok:lombok:1.18.30")
+    compileOnly(Dependencies.lombok)
+    annotationProcessor(Dependencies.lombok)
 }
 
 tasks.test {

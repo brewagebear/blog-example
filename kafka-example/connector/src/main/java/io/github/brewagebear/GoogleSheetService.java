@@ -10,26 +10,34 @@ import com.google.api.services.sheets.v4.SheetsScopes;
 import com.google.api.services.sheets.v4.model.ValueRange;
 import com.google.auth.http.HttpCredentialsAdapter;
 import com.google.auth.oauth2.GoogleCredentials;
-import com.google.auth.oauth2.ServiceAccountCredentials;
+import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
 public class GoogleSheetService {
+    private final String sheetIds;
+    private final GoogleCredentials credentials;
+
+    public GoogleSheetService(Map<String, String> props) {
+        credentials = getCredentialsFromJSON(props);
+        this.sheetIds = props.get("sheet_id");
+    }
 
     public Sheets connect() {
         try {
             HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
             JsonFactory gsonFactory = GsonFactory.getDefaultInstance();
 
-            HttpRequestInitializer httpRequestInitializer = new HttpCredentialsAdapter(getCredentialsFromStream());
+            HttpRequestInitializer httpRequestInitializer = new HttpCredentialsAdapter(credentials);
 
             return new Sheets.Builder(httpTransport, gsonFactory, httpRequestInitializer)
                     .setApplicationName("Google Sheet Reader")
@@ -40,16 +48,19 @@ public class GoogleSheetService {
         }
     }
 
-    private GoogleCredentials getCredentialsFromStream() {
-        try (InputStream stream = new ByteArrayInputStream(Objects.requireNonNull(GoogleSheetService.class.getResourceAsStream("/credentials.json")).readAllBytes())) {
-            return ServiceAccountCredentials.fromStream(stream)
+    private GoogleCredentials getCredentialsFromJSON(Map<String, String> props) {
+        String json = new Gson().toJson(props);
+        log.info("{}", json);
+
+        try (InputStream inputStream = new ByteArrayInputStream(json.getBytes(StandardCharsets.UTF_8))) {
+            return GoogleCredentials.fromStream(inputStream)
                     .createScoped(Collections.singletonList(SheetsScopes.SPREADSHEETS_READONLY));
-        } catch (Exception e) {
-            throw new RuntimeException("Error creating Google credentials: ", e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
-    public List<List<String>> getResponse(String sheetIds, Sheets sheets, String range) throws IOException {
+    public List<List<String>> getResponse(Sheets sheets, String range) throws IOException {
         log.info("Google Sheet API Params : {}, {}", sheetIds, range);
 
         ValueRange execute = sheets.spreadsheets().values()
